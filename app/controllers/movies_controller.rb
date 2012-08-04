@@ -13,6 +13,8 @@ class MoviesController < ApplicationController
     else
       @movies = Movie.all
     end
+
+    @all_ratings = ["G"]
   end
 
 
