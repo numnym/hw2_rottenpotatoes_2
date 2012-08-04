@@ -7,14 +7,25 @@ class MoviesController < ApplicationController
   end
 
   def index
-    if (params.has_key?(:sorted_by))
-      @movies = Movie.order(params[:sorted_by])
-      @sort = params[:sorted_by]
-    else
-      @movies = Movie.all
+
+    @all_ratings = []
+    Movie.select(:rating).each do |rating|
+        @all_ratings  << rating.rating
+    end
+    @all_ratings.uniq!
+
+    selected_ratings = []
+    if (params.has_key?(:ratings))
+      @selected_ratings = params[:ratings].keys
     end
 
-    @all_ratings = ["G"]
+    if (params.has_key?(:sorted_by))
+      @movies = Movie.where(:rating => @selected_ratings).order(params[:sorted_by])
+      @sort = params[:sorted_by]
+    else
+      @movies = Movie.where(:rating => @selected_ratings) 
+    end
+
   end
 
 
