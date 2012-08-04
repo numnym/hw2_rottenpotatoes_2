@@ -7,8 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    if (params.has_key?(:sorted_by))
+      @movies = Movie.order(params[:sorted_by])
+      @sort = params[:sorted_by]
+    else
+      @movies = Movie.all
+    end
   end
+
 
   def new
     # default: render 'new' template
