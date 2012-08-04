@@ -8,22 +8,26 @@ class MoviesController < ApplicationController
 
   def index
 
-    
-
     selected_ratings = []
     if (params.has_key?(:ratings))
       @selected_ratings = params[:ratings].keys
-      # save to sessions
+      session[:selected_ratings] = @selected_ratings
+    else
+      @selected_ratings = session[:selected_ratings]
     end
-      #restore from sessions
 
     if (params.has_key?(:sorted_by))
-      @movies = Movie.where(:rating => @selected_ratings).order(params[:sorted_by])
-      @sort = params[:sorted_by]
+      @sorted_by = params[:sorted_by]
+      session[:sorted_by] = @sorted_by
     else
-      @movies = Movie.where(:rating => @selected_ratings) 
+      @sorted_by = session[:sorted_by]
     end
-
+    
+    if (@sorted_by == nil)
+        @movies = Movie.where(:rating => @selected_ratings) 
+    else
+      @movies = Movie.where(:rating => @selected_ratings).order(@sorted_by)
+    end
     @all_ratings = []
     Movie.select(:rating).each do |rating|
         @all_ratings  << rating.rating
