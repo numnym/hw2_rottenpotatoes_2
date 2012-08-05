@@ -7,7 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
-    session.clear
+    #session.clear
     # @movies = Movie.all
 
     if ((!params.has_key?(:ratings)) && (!params.has_key?(:sorted_by)))
